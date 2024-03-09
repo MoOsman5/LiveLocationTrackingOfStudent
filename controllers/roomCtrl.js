@@ -1,4 +1,5 @@
 const roommodel = require('../models/Rooms.js')
+const usermodel = require('../models/Rooms.js')
 
 
 exports.createroom = async (req,res)=> {
@@ -134,3 +135,94 @@ message : err.message
 
 
     }
+
+
+    exports.enrollToRoom = async(req,res)=>{
+        try{
+        const roomid = await req.params.id
+        const students = await req.body.students
+        
+        //if The Room Doesnt Exist
+        console.log(roomid)
+        if( !(roommodel.findById(roomid))){
+        console.log('here')
+        return res.status(404).json({
+        
+        message : "The Room Doesn,t Exist"
+        
+        })
+        }
+        
+        //if The Student Add Before 
+        const room = await roommodel.findOne({_id : roomid})
+        //if There is No Array
+        
+        if (!room.students) {
+            room.students = [];
+        }
+        
+        
+        if(room.students.includes(students)){
+        
+        return res.status(404).json({
+        
+        message : "This Student Added Before"
+        
+        })
+        
+        }
+        
+        
+        room.students.push(students);
+        await room.save();
+        
+        return res.status(200).json({ message: "Student Enrolled Successfully" });
+        
+        }catch(err){
+        
+        return res.status(404).json({
+        
+        error : err.message
+        
+        })
+        
+        }
+        
+        
+        
+        }
+        
+        
+        
+        
+        exports.showUsers = async(req,res)=>{
+        try{
+            const roomid = await req.params.id
+            const room = await  roommodel.findOne({_id :roomid})
+            if(!room ){    
+            return res.status(404).json({
+            message : "This Room Dosen,t Exist"
+            
+                })
+            }
+            
+             const users =  await room.populate("students" , 'Username')
+        
+        return res.status(200).json({
+        users
+        
+        })
+        
+        }catch(err){
+        
+        return res.status(404).json({
+        message : err.message
+        
+        })
+        
+        }
+        
+        
+        
+        
+        }

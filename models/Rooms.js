@@ -9,7 +9,8 @@ roomname: {
 type : String ,
 requried : true 
 
-}
+},
+students :[{ type: mongoose.Schema.Types.ObjectId , required:false  , ref: 'user' , match: { roles: {$in:['students']}} }]
 
 
 },

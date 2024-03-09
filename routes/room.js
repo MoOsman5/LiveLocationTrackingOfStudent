@@ -9,6 +9,10 @@ roomrouter.get('/:id' , roomcontroller.findderoom)
 roomrouter.get('/detailedroom/:id'  , roomcontroller.getDetailedroom)
 roomrouter.patch('/:id' , roomcontroller.Updatedroom)
 roomrouter.post('/CreateRoom' , roomcontroller.createroom)
+roomrouter.post('/enrollToRoom/:id' , roomcontroller.enrollToRoom)
+roomrouter.get('/ShowUsersinRoom/:id' , roomcontroller.showUsers )
+
+
 
 
 
