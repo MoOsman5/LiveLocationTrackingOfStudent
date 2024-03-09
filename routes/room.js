@@ -11,7 +11,7 @@ roomrouter.patch('/:id' , roomcontroller.Updatedroom)
 roomrouter.post('/CreateRoom' , roomcontroller.createroom)
 roomrouter.post('/enrollToRoom/:id' , roomcontroller.enrollToRoom)
 roomrouter.get('/ShowUsersinRoom/:id' , roomcontroller.showUsers )
-roomrouter.get('/TrackLivePosition' )
+roomrouter.get('/TrackLivePosition/:id' , roomcontroller.getLivePosition )
 
 
 

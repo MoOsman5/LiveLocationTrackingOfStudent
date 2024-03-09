@@ -27,8 +27,9 @@ roles: {type : String , enum:roles , default: "students" } ,
 
 tokens : [{type : Object}],
 
-
-//Adding Cart For User
+latitude: { type : Number , required : false }  , 
+   
+longitude: {type : Number , required : false }
 
 
 },

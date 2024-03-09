@@ -226,3 +226,41 @@ message : err.message
         
         
         }
+
+
+
+ exports.getLivePosition = async(req,res)=>{
+
+try{
+const roomid = await req.params.id
+const student = await req.body.students
+const room = await roommodel.findOne({_id : roomid}) 
+
+
+const studentPosition = await  room.populate({
+    path : 'students' , 
+    match : {_id :{$eq : student}} ,
+    select: 'latitude longitude '
+    
+     }) ;
+
+
+return res.status(200).json({
+message : "Here is The Live Position" ,
+data : studentPosition
+})
+
+
+}catch(err){
+
+return res.status(404).json({
+
+message : err.message
+
+})
+
+}
+
+
+
+        }
