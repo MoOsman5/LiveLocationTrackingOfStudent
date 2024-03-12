@@ -3,8 +3,11 @@ const  mongoose = require("mongoose");
 const { Sequelize } = require('sequelize');
 const url = require("url");
 const app = express();
-const http = require("http").Server(app);
-const io  = require("socket.io")(http)
+// const http = require("http").Server(app);
+const { createServer } = require('node:http');
+const { Server } = require('socket.io');
+const server = createServer(app);
+const io = new Server(server);
 const  cors = require ("cors") ;
 const  dotenv = require ('dotenv') ;    
 const cookieParser = require('cookie-parser')
@@ -28,7 +31,9 @@ app.use(cors());
   
   next();
   })
+  // const data = await  req.body;
 
+  // Emit a fake 'location' event to simulate receiving location data
 //Validation
  
 app.use("/auth" , authroute);
@@ -38,44 +43,52 @@ app.use("/department" , departmentrouter);
 app.use("/faculty" , facultyrouter);
 
 //Implementaion Of Socket Io 
-io.on('connection', (socket) => {
-  console.log('User connected');
 
-  // When a user sends their location
-  socket.on('location', async (data) => {
-      try {
-          // Find the user by username
-          const user = await User.findOne({ Username: data.Username });
-          
-          if (!user) {
-              console.log('User not found');
-              return;
-          }
+const port = process.env.PORT;
 
-          // Update user's location
-          user.latitude = data.latitude;
-          user.longitude = data.longitude;
-          await user.save();
 
-          // Emit updated location to all clients
-          io.emit('locationUpdate', { Username: user.Username, latitude: user.latitude, longitude: user.longitude });
-      } catch (err) {
-          console.error('Error updating location:', err);
-      }
-  });
+ server.listen(port, () =>{
 
-  // Disconnect event
-  socket.on('disconnect', () => {
-      console.log('User disconnected');
-  });
+console.log(`app is  Running on ${port}`);
+
 });
 
+app.post('/',async (req, res) => {
 
+  io.emit('location', "hello Hello");
 
+  res.json({ message: 'Location data sent successfully' });
+});
+ io.on('connection', (socket) => {
+  
+  console.log('Socket connection established');
+        //     console.log("Before database query");
+      //     const user = await User.findOne({ Username: data.Username });
+      //     console.log("After database query");
 
+      //     if (!user) {
+      //         console.log('User not found');
+      //         return;
+      //     }
 
+      //     // Update user's location
+      //     user.latitude = data.latitude;
+      //     user.longitude = data.longitude;
+      //     await user.save();
 
+      //     // Emit updated location to all clients
+      //     sockethandelr.emit('locationUpdate', { Username: user.Username, latitude: user.latitude, longitude: user.longitude });
+       
+  
 
+     
+     
+   
+
+  socket.on('disconnect', () => {
+      console.log('Socket disconnected');
+  });
+});
 
 
 
@@ -118,11 +131,3 @@ console.log("Connected To Data Base")
 
 
 
-const port = process.env.PORT;
-
-
-app.listen(port, () =>{
-
-console.log(`app is  Running on ${port}`);
-
-});
