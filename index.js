@@ -11,6 +11,7 @@ const io = new Server(server);
 const  cors = require ("cors") ;
 const  dotenv = require ('dotenv') ;    
 const cookieParser = require('cookie-parser')
+app.use(cors());
 const authroute = require('./routes/auth.js')
 const userrouter = require('./routes/users.js')
 const roomrouter = require('./routes/room.js')
@@ -20,7 +21,7 @@ const User = require('./models/User.js')
 dotenv.config();
 
 
-app.use(cors());
+
  app.use(express.json())
  app.use(cookieParser());
  app.use(express.urlencoded({extended :true}))
@@ -53,37 +54,47 @@ console.log(`app is  Running on ${port}`);
 
 });
 
-app.post('/',async (req, res) => {
+app.post('/sendlocation', async(req, res) => {
+  const data =  await req.body;
 
-  io.emit('location', "hello Hello");
+  // Emit a fake 'location' event to simulate receiving location data
+  io.emit('location', data);
 
   res.json({ message: 'Location data sent successfully' });
 });
- io.on('connection', (socket) => {
+
+
+
+
+ io.on('connection', async (socket) => {
   
   console.log('Socket connection established');
-        //     console.log("Before database query");
-      //     const user = await User.findOne({ Username: data.Username });
-      //     console.log("After database query");
+console.log("Hello")
+  socket.on('location', async (data) => {
+    try {
+        console.log("Before database query");
+        console.log("Hello")
+        const user = await User.findOne({ Username: data.Username });
+        console.log("After database query");
 
-      //     if (!user) {
-      //         console.log('User not found');
-      //         return;
-      //     }
+        if (!user) {
+            console.log('User not found');
+            return;
+        }
 
-      //     // Update user's location
-      //     user.latitude = data.latitude;
-      //     user.longitude = data.longitude;
-      //     await user.save();
+        // Update user's location
+        user.latitude = data.latitude;
+        user.longitude = data.longitude;
+        await user.save();
 
-      //     // Emit updated location to all clients
-      //     sockethandelr.emit('locationUpdate', { Username: user.Username, latitude: user.latitude, longitude: user.longitude });
-       
-  
+        //  Emit updated location to all clients
+         io.emit('locationUpdate', { Username: user.Username, latitude: user.latitude, longitude: user.longitude });
 
-     
-     
-   
+      } catch (err) {
+        console.error('Error updating location:', err);
+    }
+});
+console.log("hello2")
 
   socket.on('disconnect', () => {
       console.log('Socket disconnected');

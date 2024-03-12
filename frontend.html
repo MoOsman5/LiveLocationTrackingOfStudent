@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Socket.io Test</title>
+</head>
+<body>
+  <h1>Socket.io Test</h1>
+  <button onclick="sendLocation()">Send Location</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+  <script>
+    const socket = io('http://localhost:3000'); // Replace PORT with your server port
+
+    function sendLocation() {
+      const data = {
+        Username: 'sawsan12345',
+        latitude: 5000,
+        longitude: 2000
+      };
+
+      socket.emit('location', data);
+    }
+  </script>
+</body>
+</html>
