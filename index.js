@@ -40,10 +40,7 @@ app.use("/socket.io", express.static(path.join(__dirname, "node_modules", "socke
   
   next();
   })
-  // const data = await  req.body;
 
-  // Emit a fake 'location' event to simulate receiving location data
-//Validation
  
 app.use("/auth" , authroute);
 app.use("/users" , userrouter);
@@ -95,22 +92,6 @@ const socketHandler = (io) => {
   console.log(`app is  Running on ${port}`);
   
   });
-
-
-
-
-//  io.on('connection', async (socket) => {
-//   console.log(socket.id)
- 
-//   console.log('Socket connection established');
-// console.log("Hello")
- 
-console.log("hello2")
-
-  // socket.on('disconnect', () => {
-  //     console.log('Socket disconnected');
-  // });
-
 
 
 
