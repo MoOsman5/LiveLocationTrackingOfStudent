@@ -3,11 +3,18 @@ const  mongoose = require("mongoose");
 const { Sequelize } = require('sequelize');
 const url = require("url");
 const app = express();
+const path = require("path"); // Import the 'path' module
+
 // const http = require("http").Server(app);
 const { createServer } = require('node:http');
 const { Server } = require('socket.io');
 const server = createServer(app);
-const io = new Server(server);
+const io = new Server(server , {
+
+  cors : {
+    origin : "*"
+  }
+});
 const  cors = require ("cors") ;
 const  dotenv = require ('dotenv') ;    
 const cookieParser = require('cookie-parser')
@@ -19,6 +26,7 @@ const departmentrouter = require('./routes/department.js')
 const facultyrouter = require('./routes/faculties.js')
 const User = require('./models/User.js')
 dotenv.config();
+app.use("/socket.io", express.static(path.join(__dirname, "node_modules", "socket.io", "client-dist")));
 
 
 
@@ -45,31 +53,15 @@ app.use("/faculty" , facultyrouter);
 
 //Implementaion Of Socket Io 
 
-const port = process.env.PORT;
+
+const socketHandler = (io) => {
+    io.on('connection', (socket) => {
+      console.log('A user connected');
+      socket.on('disconnect', () => {
+        console.log('A user disconnected');
+      });
 
 
- server.listen(port, () =>{
-
-console.log(`app is  Running on ${port}`);
-
-});
-
-app.post('/sendlocation', async(req, res) => {
-  const data =  await req.body;
-
-  // Emit a fake 'location' event to simulate receiving location data
-  io.emit('location', data);
-
-  res.json({ message: 'Location data sent successfully' });
-});
-
-
-
-
- io.on('connection', async (socket) => {
-  
-  console.log('Socket connection established');
-console.log("Hello")
   socket.on('location', async (data) => {
     try {
         console.log("Before database query");
@@ -94,12 +86,30 @@ console.log("Hello")
         console.error('Error updating location:', err);
     }
 });
+    });
+  };
+
+  const port = process.env.PORT;
+  server.listen(port, async () =>{
+     socketHandler(io);
+  console.log(`app is  Running on ${port}`);
+  
+  });
+
+
+
+
+//  io.on('connection', async (socket) => {
+//   console.log(socket.id)
+ 
+//   console.log('Socket connection established');
+// console.log("Hello")
+ 
 console.log("hello2")
 
-  socket.on('disconnect', () => {
-      console.log('Socket disconnected');
-  });
-});
+  // socket.on('disconnect', () => {
+  //     console.log('Socket disconnected');
+  // });
 
 
 
