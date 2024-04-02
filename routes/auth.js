@@ -1,9 +1,9 @@
 const express = require('express') ;
 const router  = express.Router();
  const  { register , login  } = require ("./../controllers/authCtl.js") 
- 
- router.post("/register" , register)
-router.post("/login" , login)
+ const {verfiytoken} = require('../utils/verfiytoken.js')
+ router.post("/register" ,   register)
+router.post("/login" , verfiytoken , login)
 
 
 
