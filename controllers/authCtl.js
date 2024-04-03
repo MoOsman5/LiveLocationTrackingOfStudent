@@ -17,7 +17,7 @@ const validEmail = (email)=>{
 
 exports.register =  async (req,res) =>{
     try{
-    const {Firstname,Lastname ,Username,email,password} = await req.body
+    const {Username,email,password} = await req.body
   
   const user =  await User.findOne({email});
 const username = await User.findOne({Username})
@@ -56,7 +56,7 @@ const username = await User.findOne({Username})
   
  
   
-    const newUser = await User.create({Firstname,Lastname,Username ,email,password :hashedPassword})
+    const newUser = await User.create({Username ,email,password :hashedPassword})
 res.status(200).json({
 message: "You Successfully Make Account"
 

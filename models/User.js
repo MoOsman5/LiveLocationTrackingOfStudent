@@ -5,10 +5,7 @@ const bcrypt =  require  ('bcryptjs')
 const roles = ["students" , "teachers" , "admin" , "superadmin"]
 const userSchema = new mongoose.Schema({
 
-Firstname : {  type:String ,  required : [true, "Please Tell Us Your Name"]}, 
 
-Lastname:{ type: String ,  required : [true , "Please Provide Your Email"]
-},
 
 Username : {
 type : String , required : true,unique :true 
