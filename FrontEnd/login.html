@@ -18,17 +18,17 @@
     <div class="login">
         <img src="assets/img/login-bg.png" alt="image" class="login__bg">
 
-        <form action="" class="login__form">
+        <form action="POST" class="login__form" id="signin-form">
             <h1 class="login__title">Login</h1>
 
             <div class="login__inputs">
                 <div class="login__box">
-                    <input type="email" placeholder="Email ID" required class="login__input">
+                    <input type="email" placeholder="Email ID" id="email" required class="login__input">
                     <i class="ri-mail-fill"></i>
                 </div>
 
                 <div class="login__box">
-                    <input type="password" placeholder="Password" required class="login__input">
+                    <input type="password" placeholder="Password" id="password" required class="login__input">
                     <i class="ri-lock-2-fill"></i>
                 </div>
             </div>
@@ -49,6 +49,44 @@
             </div>
         </form>
     </div>
+	<script>
+        
+        const form = document.getElementById('signin-form');
+        form.addEventListener('submit', loginUser);
+        async function loginUser(event) {
+            event.preventDefault();
+    console.log("From here")
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+    
+            try {
+                const response = await fetch('http://localhost:3000/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                }).then((res) => {
+        // Access the cookie value from the response headers
+   
+        return res.json()
+    });;
+  
+                if (response.message == "You Successfully Login") {
+                    alert("You Successfully Login"); // Show success message
+                  
+                } else {
+                    alert(response.message); // Show error message
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while processing your request.');
+            }
+        }
+    
+    </script>
+    
+
 </body>
 
 </html>

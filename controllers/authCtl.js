@@ -77,7 +77,7 @@ message: "You Successfully Make Account"
   exports.login = async(req,res,next)=>{
   try{
    
-    const user = await User.findOne({Username : req.body.Username}).select('+password')
+    const user = await User.findOne({email : req.body.email}).select('+password')
   
     const isPasswordCorrect =  await user.correctPassword( await req.body.password , user.password)
   if(!isPasswordCorrect){
@@ -95,15 +95,11 @@ message: "You Successfully Make Account"
     const token = jwt.sign({id : user._id , role:user.roles}, process.env.TOKEN_PASS)
     const {password , ...otherDetails} = user._doc;
       res.cookie("access_token",token,{
-        httpOnly:true 
-      }).status(200).json({...otherDetails});
+      
+      }).status(200).json({...otherDetails , message : "You Successfully Login"}  );
 
 // Meesage Welcomed You
-      res.status(200).json({
-
-        message : "You Successfully Login"
-
-      })
+      
 
 
 
