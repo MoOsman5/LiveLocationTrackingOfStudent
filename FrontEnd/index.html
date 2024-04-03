@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Registration</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+
+        <header>
+            <img src="assets/photo1710350248.jpeg" id="logo" alt="">
+            <h1>Near East University</h1>
+        </header>
+        
+        <div id="navbar">
+            <ul >
+                <li><a href="welcome.html">Home</a></li>
+                <li><a href="department.html">department</a></li>
+                <li><a class="active" href="room.html">room</a></li>
+            
+            </ul>
+            <div class="">
+                <a href="auth.html">logIn/SignUp</a>
+            </div>
+        </div>
+
+        <h2>College Registration</h2>
+        <label for="facultySelect">Choose your faculty:</label>
+        <select id="facultySelect">
+            <option value="" selected disabled>Select Faculty</option>
+            <option value="faculty1">Faculty 1</option>
+            <option value="faculty2">Faculty 2</option>
+            <!-- Add more faculties as needed -->
+        </select>
+
+        <div id="departmentSection" >
+            <label for="departmentSelect">Choose department:</label>
+            <select id="departmentSelect">
+                <option selected disabled>select department</option>
+                <!-- Departments will be populated dynamically based on faculty selection -->
+            </select>
+        </div>
+
+        <div id="roomSection" style="display: none;">
+            <label for="roomSelect">Choose a room:</label>
+            <select id="roomSelect">
+                <!-- Rooms will be populated dynamically based on department selection -->
+            </select>
+        </div>
+        <button id="registerBtn" style="display: none;">Register</button>
+    </div>
+
+
+
+
+
+
+
+
+    <script src="main.js"></script>
+   
+</body>
+
+</html>
