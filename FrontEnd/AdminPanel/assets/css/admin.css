@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+*{
+  box-sizing: border-box;
+  font-family: 'Poppins',sans-serif;
+}
+
+
+body{
+    margin:0;
+	padding:20px;
+    background-color:#e6e3e3;
+    /* color: rgb(252, 250, 250); */
+
+}
+
+.curd{ 
+    max-width: 440px;
+    padding: 20px 0;
+    margin: auto;
+
+}
+
+.head{
+    text-align: center ;
+    margin: 10px;
+}
+
+.input{
+    width: 100%;
+    height: 30px;
+    outline: none;
+    border: nones;
+    margin: 4px 1;
+    border-radius: 4px;
+    padding: 4px;
+}
+.data input{
+    margin-bottom: 1%;
+    width: 15%;
+
+}
+#total{
+    background: rgb(180, 13, 13);
+    border-radius: 4px;
+}
+#total::before{
+    content: 'Total : ';
+}
+.data small{
+    font-weight: bold;
+}
+button{
+    width: 90%;
+    height: 30px;
+    background-color: rgb(7, 7, 7);
+    color: bisque;
+    border: none;
+   
+    border-radius: 20px;
+    cursor: pointer;
+    margin-bottom: 1%;
+}
+.btnSearch{
+    display: flex;
+    justify-content: space-between;
+}
+.search {
+    position: relative;
+    width: 400px;
+    margin: 0 10px;
+  }
+  
+  .search label {
+    position: relative;
+    width: 100%;
+  }
+  
+  .search label input {
+    width: 100%;
+    height: 40px;
+    border-radius: 40px;
+    padding: 5px 20px;
+    padding-left: 35px;
+    font-size: 18px;
+    outline: none;
+    border: 1px solid var(--black2);
+  }
+  
+  .search label ion-icon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 1.2rem;
+  }
+.btnSearch button{
+    width: 45%;
+}
+#deleteAll{
+    margin: 20px 0;
+}
+.table{
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+.table td,.table th{
+    padding:12px 15px;
+    border:1px solid #ddd;
+    text-align: center;
+    font-size:16px;
+  }
+ /* .table th{
+	background-color: darkblue;
+	color:#ffffff;
+} */
+.table tbody tr:nth-child(even){
+	background-color: #f5f5f5;
+}
