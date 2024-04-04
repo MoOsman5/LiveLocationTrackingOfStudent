@@ -21,14 +21,7 @@ exports.register =  async (req,res) =>{
   
   const user =  await User.findOne({email});
 const username = await User.findOne({Username})
-    //       if(user.Username){
-
-    //     return res.status(500).json({
-
-    //         error : 'User Name Already Exist'
-    //     })
-
-    // }
+  
 
   if(user ){
     return res.json({ status: 'error', error: 'User Already Exist' })
@@ -91,14 +84,13 @@ message: "You Successfully Make Account"
     return next(404,"User Not Found")
     
     }
-  //Generate Token For New Users
+ 
     const token = jwt.sign({id : user._id , role:user.roles}, process.env.TOKEN_PASS)
     const {password , ...otherDetails} = user._doc;
       res.cookie("access_token",token,{
       
       }).status(200).json({...otherDetails , message : "You Successfully Login"}  );
 
-// Meesage Welcomed You
       
 
 
