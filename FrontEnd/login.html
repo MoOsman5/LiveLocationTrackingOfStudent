@@ -2,104 +2,101 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!--=============== REMIXICONS ===============-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css" crossorigin="">
+  <!--=============== REMIXICONS ===============-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css" crossorigin="">
 
-    <!--=============== CSS ===============-->
-    <link rel="stylesheet" href="assets/css/style.css">
+  <!--=============== CSS ===============-->
+  <link rel="stylesheet" href="assets/css/style.css">
 
-    <title>Login form - Bedimcode</title>
+  <title>Login form - Bedimcode</title>
 </head>
 
 <body>
-    <div class="login">
-        <img src="assets/img/login-bg.png" alt="image" class="login__bg">
+  <div class="login">
+    <img src="assets/img/login-bg.png" alt="image" class="login__bg">
 
-        <form action="POST" class="login__form" id="signin-form">
-            <h1 class="login__title">Login</h1>
+    <form action="POST" class="login__form" id="signin-form">
+      <h1 class="login__title">Login</h1>
 
-            <div class="login__inputs">
-                <div class="login__box">
-                    <input type="email" placeholder="Email ID" id="email" required class="login__input">
-                    <i class="ri-mail-fill"></i>
-                </div>
+      <div class="login__inputs">
+        <div class="login__box">
+          <input type="email" placeholder="Email ID" id="email" required class="login__input">
+          <i class="ri-mail-fill"></i>
+        </div>
 
-                <div class="login__box">
-                    <input type="password" placeholder="Password" id="password" required class="login__input">
-                    <i class="ri-lock-2-fill"></i>
-                </div>
-            </div>
+        <div class="login__box">
+          <input type="password" placeholder="Password" id="password" required class="login__input">
+          <i class="ri-lock-2-fill"></i>
+        </div>
+      </div>
 
-            <div class="login__check">
-                <div class="login__check-box">
-                    <input type="checkbox" class="login__check-input" id="user-check">
-                    <label for="user-check" class="login__check-label">Remember me</label>
-                </div>
+      <div class="login__check">
+        <div class="login__check-box">
+          <input type="checkbox" class="login__check-input" id="user-check">
+          <label for="user-check" class="login__check-label">Remember me</label>
+        </div>
 
-                <a href="#" class="login__forgot">Forgot Password?</a>
-            </div>
+        <a href="#" class="login__forgot">Forgot Password?</a>
+      </div>
 
-            <button type="submit" class="login__button">Login</button>
+      <button type="submit" class="login__button">Login</button>
 
-            <div class="login__register">
-                Don't have an account? <a href="signup.html">Register</a>
-            </div>
-        </form>
-    </div>
-	<script>
-        
-        const form = document.getElementById('signin-form');
-        form.addEventListener('submit', loginUser);
-        async function loginUser(event) {
-            event.preventDefault();
-    console.log("From here")
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-    
-            try {
-                const response = await fetch('http://localhost:3000/auth/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                }).then((res) => {
-        // Access the cookie value from the response headers
-   
-        return  res.json()
-    });;
-  
-  
-    function parseCookies(cookieString) {
-    return cookieString.split(';').reduce((cookies, cookie) => {
-        const [name, value] = cookie.split('=').map(c => c.trim());
-        cookies[name] = value;
-        return cookies;
-    }, {});
-}
+      <div class="login__register">
+        Don't have an account? <a href="signup.html">Register</a>
+      </div>
+    </form>
+  </div>
+  <script>
+    const form = document.getElementById('signin-form');
+    form.addEventListener('submit', loginUser);
 
-// Usage
-let cookies = parseCookies(document.cookie);
-console.log(cookies) // Give me Undefinied
+    async function loginUser(event) {
+      event.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
 
+      try {
+        const response = await fetch('http://localhost:3000/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        });
 
-                if (response.message == "You Successfully Login") {
-                    alert("You Successfully Login"); // Show success message
-                  
-                } else {
-                    alert(response.message); // Show error message
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred while processing your request.');
-            }
+        const data = await response.json();
+
+        // Check if login is successful
+        if (data.message === "You Successfully Login") {
+          // Retrieve token from cookie
+          const token = getTokenFromCookie();
+          console.log('to',token);
+          // Redirect to index page
+          window.location.href = "index.html";
+        } else {
+          alert(data.message); // Show error message
         }
-    
-    </script>
-    
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while processing your request.');
+      }
+    }
+
+    function getTokenFromCookie() {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.startsWith('token=')) {
+          return cookie.substring('token='.length, cookie.length);
+        }
+      }
+      return null;
+    }
+  </script>
+
 
 </body>
 
