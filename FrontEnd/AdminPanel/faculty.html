@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+  <title>Faculties</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+  <!----css3---->
+  <link rel="stylesheet" href="./assets/css/custom.css">
+  <link rel="stylesheet" href="./assets/css/admin.css" />
+
+
+  <!--google fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+
+  <!--google material icon-->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+
+</head>
+
+<body>
+
+
+
+  <div class="wrapper">
+
+    <div class="body-overlay"></div>
+
+
+    <!------main-content-start----------->
+
+    <div class="main-content">
+      <div class="search">
+        <label>
+          <input type="text" placeholder="Search here">
+          <ion-icon name="search-outline"></ion-icon>
+        </label>
+      </div>
+      <div class="btnSearch">
+        <button onclick="getSearchMood(this.id)" id="searchName">Search by Faculty Name</button>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="table-wrapper">
+
+            <div class="table-title">
+              <div class="row">
+                <div class="col-sm-6 p-0 flex justify-content-lg-start justify-content-center">
+                  <h2 class="ml-lg-2">Manage Faculties</h2>
+                </div>
+             
+              </div>
+            </div>
+
+            <table class="table table-striped table-hover" id="facultyTable">
+              <thead>
+                <tr>
+                  <th><span class="custom-checkbox">
+                    <input type="checkbox" id="selectAll">
+                  </th>
+                  <th>Faculty Name</th>
+                </tr>
+              </thead>
+              <tbody id="facultyTableBody">
+                <!-- Table rows will be dynamically created here -->
+              </tbody>
+            </table>
+            
+            <!-- Add Faculty Form -->
+            <form id="addFacultyForm">
+              <div class="form-group">
+                <label for="facultyName">Faculty Name:</label>
+                <input type="text" class="form-control" id="facultyName" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Add Faculty</button>
+            </form>
+
+            <!-- Update Faculty Form -->
+            <form id="updateFacultyForm">
+              <div class="form-group">
+                <label for="updateFacultyId">Faculty ID:</label>
+                <input type="text" class="form-control" id="updateFacultyId" required>
+              </div>
+              <div class="form-group">
+                <label for="updateFacultyName">New Faculty Name:</label>
+                <input type="text" class="form-control" id="updateFacultyName" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Update Faculty</button>
+            </form>
+
+            <div class="clearfix">
+              <ul class="pagination">
+                <li class="page-item disabled"><a href="#">Previous</a></li>
+                <li class="page-item "><a href="#" class="page-link">1</a></li>
+                <li class="page-item "><a href="#" class="page-link">2</a></li>
+                <li class="page-item active"><a href="#" class="page-link">3</a></li>
+                <li class="page-item "><a href="#" class="page-link">4</a></li>
+                <li class="page-item "><a href="#" class="page-link">5</a></li>
+                <li class="page-item "><a href="#" class="page-link">Next</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!------main-content-end----------->
+  </div>
+  <!-- ====== ionicons ======= -->
+  <script defer type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script defer nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script src="./assets/js/jquery-3.3.1.slim.min.js"></script>
+  <script src="./assets/js/popper.min.js"></script>
+  <script src="./assets/js/bootstrap.min.js"></script>
+  <script src="./assets/js/jquery-3.3.1.min.js"></script>
+  <script src="./assets/js/faculties.js"></script>
+
+  <script>
+    // Function to fetch faculty data
+    function fetchFacultyData() {
+      fetch('http://localhost:3000/faculty/allfaculties')
+        .then(response => response.json())
+        .then(data => {
+          console.log('Fetched Faculties data:', JSON.stringify(data, null, 2));
+          if (data) {
+            const faculties = data.data;
+            const tableBody = document.getElementById('facultyTableBody');
+            tableBody.innerHTML = ''; // Clear existing table rows
+            faculties.forEach(faculty => {
+              const row = document.createElement('tr');
+              const checkboxCell = document.createElement('td');
+              const nameCell = document.createElement('td');
+              const actionsCell = document.createElement('td');
+              checkboxCell.innerHTML = `<span class="custom-checkbox">
+                        <input type="checkbox" id="checkbox-${faculty._id}" name="option[]" value="${faculty._id}">
+                        <label for="checkbox-${faculty._id}"></label>`;
+              nameCell.textContent = faculty.name;
+              const deleteButton = document.createElement('button');
+              deleteButton.className = 'btn btn-danger btn-sm mr-1';
+              deleteButton.textContent = 'Delete';
+              deleteButton.addEventListener('click', function () {
+                deleteFaculty(faculty._id);
+              });
+              actionsCell.appendChild(deleteButton);
+              row.appendChild(checkboxCell);
+              row.appendChild(nameCell);
+             
+              row.appendChild(actionsCell);
+              tableBody.appendChild(row);
+            });
+          } else {
+            console.error('Invalid Faculties data:', data);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching Faculties data:', error);
+        });
+    }
+
+    // Fetch faculty data on page load
+    fetchFacultyData();
+
+    // Function to handle form submission for adding a faculty
+    document.getElementById('addFacultyForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent the default form submission
+      const facultyName = document.getElementById('facultyName').value;
+      // Send the faculty data to the backend for adding
+      fetch('http://localhost:3000/faculty/addfaculty', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ name: facultyName })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Faculty added successfully:', data);
+          // Refresh the faculty table after adding the faculty
+          fetchFacultyData();
+        })
+        .catch(error => {
+          console.error('Error adding faculty:', error);
+        });
+    });
+
+    // Function to handle form submission for updating a faculty
+    document.getElementById('updateFacultyForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent the default form submission
+      const facultyId = document.getElementById('updateFacultyId').value;
+      const updatedFacultyName = document.getElementById('updateFacultyName').value;
+      // Send the updated faculty data to the backend for updating
+      fetch(`http://localhost:3000/faculty/${facultyId}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ name: updatedFacultyName })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Faculty updated successfully:', data);
+          // Refresh the faculty table after updating the faculty
+          fetchFacultyData();
+        })
+        .catch(error => {
+          console.error('Error updating faculty:', error);
+        });
+    });
+
+    // Function to handle delete action
+    function deleteFaculty(facultyId) {
+      console.log(facultyId);
+      fetch(`http://localhost:3000/faculty/${facultyId}`, {
+          method: 'DELETE',
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message === 'Successfully Deleted') {
+            console.log('Faculty deleted successfully');
+            const row = document.getElementById('checkbox-' + facultyId).closest('tr');
+            row.remove();
+          } else {
+            console.error('Error deleting Faculty:', data.error);
+          }
+        })
+        .catch(error => {
+          console.error('Error deleting Faculty:', error);
+        });
+    }
+
+    // Click event listener for the Update button
+    $('#facultyTableBody').on('click', '.update-btn', function() {
+      const facultyId = $(this).closest('tr').find('.checkbox').val();
+      $('#updateFacultyId').val(facultyId);
+      $('#updateFacultyModal').modal('show');
+    });
+  </script>
+</body>
+
+</html>

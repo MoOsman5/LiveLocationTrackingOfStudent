@@ -44,9 +44,10 @@ app.use("/socket.io", express.static(path.join(__dirname, "node_modules", "socke
  
 app.use("/auth" , authroute);
 app.use("/users" , userrouter);
+app.use("/faculty" , facultyrouter);
 app.use("/rooms" , roomrouter);
 app.use("/department" , departmentrouter);
-app.use("/faculty" , facultyrouter);
+
 
 //Implementaion Of Socket Io 
 
