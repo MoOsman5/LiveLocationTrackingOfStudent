@@ -1,13 +1,14 @@
 const departmentmodel = require('../models/Departments.js')
-
+const facultymodel = require('../models/Faculties.js')
 
 
 exports.addDepartment = async(req,res)=>{
 
 try{
-const id = await  req.body.faculty
-console.log(id)
-const newdepartment = await departmentmodel.create({faculty : id , departmentname : req.body.departmentname   })
+const facultyname = await  req.body.facultyname
+const faculty = await  facultymodel.findOne({ name : facultyname})
+
+const newdepartment = await departmentmodel.create({faculty : faculty._id , departmentname : req.body.departmentname   })
 res.status(200).json({
 message : "Successfully Added The Department"
 

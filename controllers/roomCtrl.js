@@ -1,10 +1,12 @@
 const roommodel = require('../models/Rooms.js')
 const usermodel = require('../models/Rooms.js')
-
+const departmentmodel = require('../models/Departments.js')
 
 exports.createroom = async (req,res)=> {
 try{
-    const Room = await roommodel.create({ department :req.body.department , roomname :req.body.roomname
+   const departmentname =  await req.body.departmentname
+const department =  await departmentmodel.findOne({departmentname : departmentname })
+    const Room = await roommodel.create({ department :department._id , roomname :req.body.roomname
     })
     
     res.status(200).json({
