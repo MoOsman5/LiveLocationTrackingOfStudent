@@ -4,6 +4,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: "Montserrat", sans-serif;
+    text-align: center;
 }
 
 /* header section */
@@ -12,8 +13,7 @@ header {
     display: flex;
     justify-content: center;
     height: 30vh;
-    background-color: #4e0f0f;
-    color: #fff;
+    background-image: url("./assets/img/login-bg.png");
 }
 
 h1 {
@@ -28,34 +28,66 @@ h1 {
 }
 
 #navbar {
-    padding: 20px;
-    width: 100%;
-    background-color: rgb(237, 237, 237);
-    margin-bottom: 20px;
-    box-shadow: 0px 5px 20px 0px rgb(183, 183, 183);
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content:end;
+  align-items: center;
+  background-color: #007bff;
+  padding: 10px 20px;
 }
 
-#navbar ul{
-    width: 40%;
-    display: flex;
-    justify-content: space-around;
-    list-style: none;
+#navbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
-#navbar ul li a{
-    color: rgb(6, 6, 99);
+
+#navbar ul li {
+  display: inline;
 }
-#navbar ul li a:hover{
-    color: rgb(92, 92, 143);
+
+#navbar ul li a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease;
 }
+
+#navbar ul li a:hover {
+  background-color: #0056b3;
+}
+
+#auth-link {
+  margin-right: auto;
+}
+
+#auth-link a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease;
+}
+
+#auth-link a:hover {
+  background-color: #0056b3;
+}
+
+
+#navbar .active a {
+  background-color: #0056b3; /* Darker blue for active link */
+}
+
+
+
 
 /*end header section*/
 
-
-#departmentSection{
-    margin: 20px 0px 0px 20px  ;
+#facultySelect, #departmentSelect{
+  width: 50%;
+  height: 100%;
+  margin-bottom: 20px;
+  margin-left: 20px;
 }
+
 
 select{
     padding: 4px;
@@ -210,4 +242,59 @@ form p a {
 
 .hidden {
     display: none;
+}
+.college-registration{
+  margin: 20px 0px 20px 20px  ;
+}
+.room{
+  margin: 20px 0px 20px 20px  ;
+  display: flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap: wrap;
+  flex-direction:column;
+  gap:  30px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 5px 20px 0px rgb(183, 183, 183);
+  background-color: rgb(237, 237, 237);
+  margin-bottom: 20px;
+  transition: max-height .3s ease;
+  
+}
+
+.room:hover{
+  box-shadow: 0px 5px 20px 0px rgb(183, 183, 183);
+  transform: translateY(-10px);
+}
+
+
+/* Arrange rooms in rows of 4 */
+#roomSection {
+  display: flex;
+  flex-wrap: wrap;
+  padding:50px;
+}
+
+.room {
+  width: calc(25% - 20px); /* Set width for each room, considering margin */
+  margin: 10px; /* Add margin between rooms */
+  padding: 20px; /* Add padding to each room */
+  border: 1px solid #ccc; /* Add border for clarity */
+  font-weight: 600;
+}
+
+/* Style the enroll button */
+.e-btn {
+  background-color: #007bff; /* Blue background color */
+  color: #fff; /* White text color */
+  padding: 10px 20px; /* Add padding to the button */
+  border: none; /* Remove button border */
+  border-radius: 5px; /* Add border radius */
+  cursor: pointer; /* Add pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+.e-btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
 }
