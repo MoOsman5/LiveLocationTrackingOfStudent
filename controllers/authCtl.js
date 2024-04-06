@@ -72,22 +72,16 @@ exports.login = async (req, res, next) => {
       { id: user._id, role: user.roles },
       process.env.TOKEN_PASS
     );
+
+    // Add token to user document
+    user.tokens.push({ token, signedAt: Date.now() });
+    await user.save();
+
     const { password, ...otherDetails } = user._doc;
     res
       .cookie("access_token", token, {})
       .status(200)
       .json({ ...otherDetails, message: "You Successfully Login" });
-
-    let oldTokens = user.tokens || [];
-
-    if (oldTokens.length) {
-      oldTokens = oldTokens.filter((t) => {
-        const timeDiff = (Date.now() - parseInt(t.signedAt)) / 1000;
-        if (timeDiff < 86400) {
-          return t;
-        }
-      });
-    }
   } catch (err) {
     res.status(err.message);
   }

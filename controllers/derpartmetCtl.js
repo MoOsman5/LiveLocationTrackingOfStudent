@@ -65,7 +65,18 @@ exports.finddepartment= async (req,res) =>{
     })
     }
     }
-    
+    exports.findDepartmentsByFacultyId = async (req, res) => {
+      try {
+          const departments = await departmentmodel.find({ faculty: req.params.facultyId });
+          res.status(200).json({
+              data: departments
+          });
+      } catch (err) {
+          res.status(404).json({
+              error: err.message
+          });
+      }
+  };
     
     exports.DeleteDepartment = async (req,res)=>{
     try{
