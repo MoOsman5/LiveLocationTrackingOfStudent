@@ -76,13 +76,11 @@
           const userId = data._id;
           const token = data.tokens[0].token;
 
+
           // Add user ID and token to cookies
           document.cookie = `user_id=${userId}; path=/`;
           document.cookie = `access_token=${token}; path=/`;
-
-          console.log('User ID:', userId);
-          console.log('Token:', token);
-
+        
           // Redirect to index page
           window.location.href = "index.html";
         } else {

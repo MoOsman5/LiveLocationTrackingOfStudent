@@ -53,6 +53,10 @@ exports.login = async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email }).select(
       "+password"
     );
+    if (!user) {
+      return res.status(404).json({
+ message: "User Doesnt Exist"    });
+    }
 
     const isPasswordCorrect = await user.correctPassword(
       await req.body.password,
@@ -64,9 +68,7 @@ exports.login = async (req, res, next) => {
       });
     }
 
-    if (!user) {
-      return next(404, "User Not Found");
-    }
+    
 
     const token = jwt.sign(
       { id: user._id, role: user.roles },
