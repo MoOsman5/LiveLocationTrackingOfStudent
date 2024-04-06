@@ -1,16 +1,77 @@
+
 // Sample data - replace with your actual data
-const faculties = {
-  faculty1: ["Department 1", "Department 2", "Department 3"],
-  faculty2: ["Department A", "Department B", "Department C"],
-};
+let faculties = [];
+let departments = {};
+let facultyId=null;
 
-const departments = {
-  "Department 1": ["Room 1", "Room 2", "Room 3"],
-  "Department 2": ["Room 101", "Room 102", "Room 103"],
-  "Department 3": ["Room 201", "Room 202", "Room 203"],
-  // Add more departments and rooms as needed
-};
+// Fetch faculty data from the server
+fetch('http://localhost:3000/faculty/allfaculties')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    faculties = data.data; // Assign fetched data to faculties
+    
+    // Populate the faculties dropdown
+    const facultySelect = document.getElementById("facultySelect");
+    facultySelect.innerHTML = ""; // Clear existing options
+    
+    // Add default option
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Select Faculty";
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+    facultySelect.appendChild(defaultOption);
+    
+    // Add options for each faculty
+    faculties.forEach((faculty, index) => {
+      const option = document.createElement("option");
+      option.value = faculty._id;
+      option.textContent = `${faculty.name}`;
+      facultySelect.appendChild(option);
+    });
+  })
+  .catch(error => {
+    console.error('Error fetching faculty data:', error);
+  });
 
+// Event listener for the faculty select dropdown
+const facultySelect = document.getElementById("facultySelect");
+facultySelect.addEventListener('change', function() {
+  facultyId = this.value; // Update facultyId when a faculty is selected
+  console.log(facultyId)
+  fetch(`http://localhost:3000/department/getByFacultyId/${facultyId}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Process the data here
+      console.log('Departments:', data);
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+});
+
+// Function to populate departments dropdown based on selected faculty
+function populateDepartments() {
+  const selectedFaculty = document.getElementById("facultySelect").value;
+  const departmentSelect = document.getElementById("departmentSelect");
+  departmentSelect.innerHTML = "";
+  faculties[selectedFaculty].forEach((department) => {
+    const option = document.createElement("option");
+    option.text = department;
+    departmentSelect.add(option);
+  });
+  document.getElementById("departmentSection").style.display = "block";
+}
 // Function to populate departments dropdown based on selected faculty
 function populateDepartments() {
   const selectedFaculty = document.getElementById("facultySelect").value;
@@ -48,7 +109,7 @@ function enrollRoom(btn) {
   btn.textContent = "Enrolled";
   // Disable button after enrollment
   btn.disabled = true;
-  const co = localStorage.getItem("access_token");
+  const co = document.cookie;
   console.log(co);
 }
 
@@ -57,6 +118,37 @@ function logout() {
 
   document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 }
+
+// Function to get the user ID from the JWT token stored in the cookie
+function getUserIdFromCookie() {
+  // Get the user_id from the cookie
+  const cookie = getCookie('user_id');
+  
+  if (!cookie) {
+    // If cookie is not found, return null
+    return null;
+  }
+  
+  return cookie;
+}
+
+
+// Function to get cookie value by name
+function getCookie(name) {
+  const cookieString = document.cookie;
+  const cookies = cookieString.split('; ');
+  for (let cookie of cookies) {
+    const [cookieName, cookieValue] = cookie.split('=');
+    if (cookieName === name) {
+      return decodeURIComponent(cookieValue);
+    }
+  }
+  return null;
+}
+
+// Example usage
+const userId = getUserIdFromCookie();
+console.log('User ID:', userId);
 
 
 //registration

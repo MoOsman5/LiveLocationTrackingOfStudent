@@ -55,6 +55,7 @@
 
     async function loginUser(event) {
       event.preventDefault();
+
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
@@ -70,10 +71,18 @@
         const data = await response.json();
 
         // Check if login is successful
-        if (data.message === "You Successfully Login") {
-          // Retrieve token from cookie
-          const token = getTokenFromCookie();
-          console.log('to',token);
+        if (response.ok) {
+          // Retrieve user ID and token from response
+          const userId = data._id;
+          const token = data.tokens[0].token;
+
+          // Add user ID and token to cookies
+          document.cookie = `user_id=${userId}; path=/`;
+          document.cookie = `access_token=${token}; path=/`;
+
+          console.log('User ID:', userId);
+          console.log('Token:', token);
+
           // Redirect to index page
           window.location.href = "index.html";
         } else {
@@ -83,17 +92,6 @@
         console.error('Error:', error);
         alert('An error occurred while processing your request.');
       }
-    }
-
-    function getTokenFromCookie() {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.startsWith('token=')) {
-          return cookie.substring('token='.length, cookie.length);
-        }
-      }
-      return null;
     }
   </script>
 
