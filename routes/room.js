@@ -5,6 +5,7 @@ const roomcontroller = require('../controllers/roomCtrl.js')
 
 roomrouter.delete('/:id ', roomcontroller.Deleteroom)
 roomrouter.get('/allrooms' , roomcontroller.getAllrooms)
+roomrouter.get('/getByDepartmentId/:DepartmentId', roomcontroller.findroomsbydepartmentid)
 roomrouter.get('/:id' , roomcontroller.findderoom)
 roomrouter.get('/detailedroom/:id'  , roomcontroller.getDetailedroom)
 roomrouter.patch('/:id' , roomcontroller.Updatedroom)

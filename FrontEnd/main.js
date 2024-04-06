@@ -84,64 +84,43 @@ facultySelect.addEventListener('change', function() {
     });
 });
 
-// Event listener for the faculty select dropdown
-// const facultySelect = document.getElementById("facultySelect");
-// facultySelect.addEventListener('change', function() {
-//   facultyId = this.value; // Update facultyId when a faculty is selected
-//   console.log(facultyId)
-//   fetch(`http://localhost:3000/department/getByFacultyId/${facultyId}`)
-//     .then(response => {
-//       if (!response.ok) {
-//         throw new Error('Network response was not ok');
-//       }
-//       return response.json();
-//     })
-//     .then(data => {
-//       // Process the data here
-//       console.log('Departments:', data);
-//     })
-//     .catch(error => {
-//       console.error('Error fetching data:', error);
-//     });
-// });
-
-// // Function to populate departments dropdown based on selected faculty
-// function populateDepartments() {
-//   const selectedFaculty = document.getElementById("facultySelect").value;
-//   const departmentSelect = document.getElementById("departmentSelect");
-//   departmentSelect.innerHTML = "";
-//   faculties[selectedFaculty].forEach((department) => {
-//     const option = document.createElement("option");
-//     option.text = department;
-//     departmentSelect.add(option);
-//   });
-//   document.getElementById("departmentSection").style.display = "block";
-// }
-// // Function to populate departments dropdown based on selected faculty
-// function populateDepartments() {
-//   const selectedFaculty = document.getElementById("facultySelect").value;
-//   const departmentSelect = document.getElementById("departmentSelect");
-//   departmentSelect.innerHTML = "";
-//   faculties[selectedFaculty].forEach((department) => {
-//     const option = document.createElement("option");
-//     option.text = department;
-//     departmentSelect.add(option);
-//   });
-//   document.getElementById("departmentSection").style.display = "block";
-// }
 
 // Function to populate rooms dropdown based on selected department
 function populateRooms() {
-  const selectedDepartment = document.getElementById("departmentSelect").value;
+  const selectedDepartmentId = document.getElementById("departmentSelect").value;
   const roomSelect = document.getElementById("roomSelect");
+  
+  // Clear existing options
   roomSelect.innerHTML = "";
-  departments[selectedDepartment].forEach((room) => {
-    const option = document.createElement("option");
-    option.text = room;
-    roomSelect.add(option);
-  });
-  document.getElementById("roomSection").style.display = "block";
-  document.getElementById("registerBtn").style.display = "block";
+  
+  // Fetch rooms based on the selected department ID
+  fetch(`http://localhost:3000/rooms/getByDepartmentId/${selectedDepartmentId}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Process the data here
+      console.log('Rooms:', data);
+      const rooms = data.data
+      // Assuming the response data is an array of room objects
+      // You can populate the rooms dropdown here
+      rooms.forEach((room, index) => {
+        const option = document.createElement("option");
+        option.value = room._id; // Assuming room objects have _id property
+        option.textContent = room.roomName; // Assuming room objects have roomName property
+        roomSelect.appendChild(option);
+      });
+      
+      // Show the room section after rooms are fetched
+      document.getElementById("roomSection").style.display = "block";
+      document.getElementById("registerBtn").style.display = "block";
+    })
+    .catch(error => {
+      console.error('Error fetching rooms:', error);
+    });
 }
 
 // Event listeners
@@ -157,6 +136,25 @@ function enrollRoom(btn) {
   const co = document.cookie;
   console.log(co);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function logout() {
   // Set the expiration date of the token cookie to the past

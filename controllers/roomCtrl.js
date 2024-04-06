@@ -266,3 +266,21 @@ message : err.message
 
 
         }
+
+
+
+        exports.findroomsbydepartmentid = async (req, res) => {
+            try {
+                const rooms = await roommodel.find({ department: req.params.DepartmentId }).select('roomname');
+               
+                console.log(rooms)
+                
+                res.status(200).json({
+                    data: rooms
+                });
+            } catch (err) {
+                res.status(404).json({
+                    error: err.message
+                });
+            }
+        };
