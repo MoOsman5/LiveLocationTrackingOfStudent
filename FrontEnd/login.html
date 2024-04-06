@@ -75,14 +75,26 @@
           // Retrieve user ID and token from response
           const userId = data._id;
           const token = data.tokens[0].token;
-
+          const role = data.roles
 
           // Add user ID and token to cookies
+          document.cookie = `role=${role}; path=/`; 
           document.cookie = `user_id=${userId}; path=/`;
           document.cookie = `access_token=${token}; path=/`;
-        
-          // Redirect to index page
+         
+       console.log(role)
+          if(role == 'students'){
+                  // Redirect to index page
           window.location.href = "index.html";
+        }
+
+        if(role ==  'superadmin' || role == 'teachers' || role == 'admin'){
+                  // Redirect to index page
+                  window.location.href = "./AdminPanel/index.html";
+
+        }
+
+
         } else {
           alert(data.message); // Show error message
         }
