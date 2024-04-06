@@ -67,7 +67,10 @@ exports.finddepartment= async (req,res) =>{
     }
     exports.findDepartmentsByFacultyId = async (req, res) => {
       try {
-          const departments = await departmentmodel.find({ faculty: req.params.facultyId });
+          const departments = await departmentmodel.find({ faculty: req.params.facultyId }).select("departmentname");
+         
+          console.log(departments)
+          
           res.status(200).json({
               data: departments
           });

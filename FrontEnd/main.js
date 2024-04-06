@@ -38,12 +38,12 @@ fetch('http://localhost:3000/faculty/allfaculties')
   .catch(error => {
     console.error('Error fetching faculty data:', error);
   });
-
 // Event listener for the faculty select dropdown
 const facultySelect = document.getElementById("facultySelect");
 facultySelect.addEventListener('change', function() {
   facultyId = this.value; // Update facultyId when a faculty is selected
-  console.log(facultyId)
+  
+  // Fetch departments based on the selected faculty ID
   fetch(`http://localhost:3000/department/getByFacultyId/${facultyId}`)
     .then(response => {
       if (!response.ok) {
@@ -54,36 +54,81 @@ facultySelect.addEventListener('change', function() {
     .then(data => {
       // Process the data here
       console.log('Departments:', data);
+      departments = data.data
+      // Assuming the response data is an array of department objects
+      // You can populate the departments dropdown here
+      const departmentSelect = document.getElementById("departmentSelect");
+      departmentSelect.innerHTML = ""; // Clear existing options
+      
+      // Add default option
+      const defaultOption = document.createElement("option");
+      defaultOption.value = "";
+      defaultOption.textContent = "Select Department";
+      defaultOption.disabled = true;
+      defaultOption.selected = true;
+      departmentSelect.appendChild(defaultOption);
+      
+      // Add options for each department
+      departments.forEach((department, index) => {
+        const option = document.createElement("option");
+        option.value = department._id; // Assuming department objects have _id property
+        option.textContent = department.departmentname; // Assuming department objects have departmentname property
+        departmentSelect.appendChild(option);
+      });
+      
+      // Show the department section after departments are fetched
+      document.getElementById("departmentSection").style.display = "block";
     })
     .catch(error => {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching departments:', error);
     });
 });
 
-// Function to populate departments dropdown based on selected faculty
-function populateDepartments() {
-  const selectedFaculty = document.getElementById("facultySelect").value;
-  const departmentSelect = document.getElementById("departmentSelect");
-  departmentSelect.innerHTML = "";
-  faculties[selectedFaculty].forEach((department) => {
-    const option = document.createElement("option");
-    option.text = department;
-    departmentSelect.add(option);
-  });
-  document.getElementById("departmentSection").style.display = "block";
-}
-// Function to populate departments dropdown based on selected faculty
-function populateDepartments() {
-  const selectedFaculty = document.getElementById("facultySelect").value;
-  const departmentSelect = document.getElementById("departmentSelect");
-  departmentSelect.innerHTML = "";
-  faculties[selectedFaculty].forEach((department) => {
-    const option = document.createElement("option");
-    option.text = department;
-    departmentSelect.add(option);
-  });
-  document.getElementById("departmentSection").style.display = "block";
-}
+// Event listener for the faculty select dropdown
+// const facultySelect = document.getElementById("facultySelect");
+// facultySelect.addEventListener('change', function() {
+//   facultyId = this.value; // Update facultyId when a faculty is selected
+//   console.log(facultyId)
+//   fetch(`http://localhost:3000/department/getByFacultyId/${facultyId}`)
+//     .then(response => {
+//       if (!response.ok) {
+//         throw new Error('Network response was not ok');
+//       }
+//       return response.json();
+//     })
+//     .then(data => {
+//       // Process the data here
+//       console.log('Departments:', data);
+//     })
+//     .catch(error => {
+//       console.error('Error fetching data:', error);
+//     });
+// });
+
+// // Function to populate departments dropdown based on selected faculty
+// function populateDepartments() {
+//   const selectedFaculty = document.getElementById("facultySelect").value;
+//   const departmentSelect = document.getElementById("departmentSelect");
+//   departmentSelect.innerHTML = "";
+//   faculties[selectedFaculty].forEach((department) => {
+//     const option = document.createElement("option");
+//     option.text = department;
+//     departmentSelect.add(option);
+//   });
+//   document.getElementById("departmentSection").style.display = "block";
+// }
+// // Function to populate departments dropdown based on selected faculty
+// function populateDepartments() {
+//   const selectedFaculty = document.getElementById("facultySelect").value;
+//   const departmentSelect = document.getElementById("departmentSelect");
+//   departmentSelect.innerHTML = "";
+//   faculties[selectedFaculty].forEach((department) => {
+//     const option = document.createElement("option");
+//     option.text = department;
+//     departmentSelect.add(option);
+//   });
+//   document.getElementById("departmentSection").style.display = "block";
+// }
 
 // Function to populate rooms dropdown based on selected department
 function populateRooms() {
