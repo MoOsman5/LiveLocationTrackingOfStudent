@@ -99,8 +99,6 @@ exports.getDetailedroom = async (req, res) => {
   }
 };
 
-
-
 exports.showUsers = async (req, res) => {
   try {
     const roomid = await req.params.id;
@@ -285,24 +283,22 @@ exports.leaveRoom = async (req, res) => {
   }
 };
 
-
 exports.findRoomsByUserId = async (req, res) => {
   try {
-      const userid = await req.params.id;
-console.log(userid)
-      // Find rooms where the user is enrolled
-      const rooms = await roommodel.find({ students: userid });
+    const userid = await req.params.id;
+    console.log(userid);
+    // Find rooms where the user is enrolled
+    const rooms = await roommodel.find({ students: userid });
 
+    // If no rooms found, return a message
+    if (rooms.length === 0) {
+      return res.status(404).json({ message: "No rooms found for the user" });
+    }
 
-      // If no rooms found, return a message
-      if (rooms.length === 0) {
-          return res.status(404).json({ message: "No rooms found for the user" });
-      }
+    // If rooms found, return their IDs
 
-      // If rooms found, return their IDs
-    
-      return res.status(200).json({ data: rooms });
+    return res.status(200).json({ data: rooms });
   } catch (err) {
-      return res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
-}
+};

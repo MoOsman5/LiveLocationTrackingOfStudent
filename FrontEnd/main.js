@@ -2,6 +2,26 @@
 let faculties = [];
 let departments = {};
 let facultyId = null;
+let enrolledRoomId = null;
+// Example usage
+const userId = getUserIdFromCookie();
+
+// Fetch rooms based on User ID
+fetch(`http://localhost:3000/rooms/FindUserRoom/${userId}`)
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  })
+  .then((data) => {
+    // Process the data here
+    enrolledRoomId =  data.data[0]._id
+    // Call a function to handle the retrieved rooms data
+  })
+  .catch((error) => {
+    console.error("Error fetching rooms:", error);
+  });
 
 // Fetch faculty data from the server
 fetch("http://localhost:3000/faculty/allfaculties")
@@ -53,7 +73,6 @@ facultySelect.addEventListener("change", function () {
     })
     .then((data) => {
       // Process the data here
-      console.log("Departments:", data);
       departments = data.data;
       // Assuming the response data is an array of department objects
       // You can populate the departments dropdown here
@@ -102,6 +121,11 @@ function populateRooms(rooms) {
     const enrollBtn = document.createElement("div");
     enrollBtn.classList.add("e-btn");
     enrollBtn.textContent = "Enroll";
+    if (room._id==enrolledRoomId) {
+      enrollBtn.style.backgroundColor = "red";
+      enrollBtn.textContent = "Leave Room";
+      
+    }
     enrollBtn.onclick = function() {
       enrollRoom(room._id); // Assuming room objects have _id property
     };
@@ -130,7 +154,6 @@ departmentSelect.addEventListener("change", function () {
     })
     .then((data) => {
       // Process the data here
-      console.log("Rooms:", data.data);
       const rooms = data.data;
       populateRooms(rooms); // Populate rooms with enroll buttons
     })
@@ -138,6 +161,9 @@ departmentSelect.addEventListener("change", function () {
       console.error("Error fetching rooms:", error);
     });
 });
+
+
+
 
 // Function to handle room enrollment
 function enrollRoom(roomId) {
@@ -168,7 +194,7 @@ function enrollRoom(roomId) {
         }
       })
       .catch((error) => {
-        console.error("Error leaving room:", error);
+        alert("Error leaving room:", error);
       });
   } else {
     // If the button is not enrolled, enroll in the room
@@ -187,7 +213,7 @@ function enrollRoom(roomId) {
           enrollBtn.style.backgroundColor = "red";
           enrollBtn.textContent = "Leave Room";
         } else {
-          console.error("Error enrolling in room:", data.message);
+          alert(`Error enrolling in room:${data.message}`);
         }
       })
       .catch((error) => {
@@ -229,9 +255,7 @@ function getCookie(name) {
   return null;
 }
 
-// Example usage
-const userId = getUserIdFromCookie();
-console.log("User ID:", userId);
+
 
 //registration
 
