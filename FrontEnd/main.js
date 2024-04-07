@@ -1,8 +1,7 @@
-
 // Sample data - replace with your actual data
 let faculties = [];
 let departments = {};
-let facultyId=null;
+let facultyId = null;
 
 // Fetch faculty data from the server
 fetch('http://localhost:3000/faculty/allfaculties')
@@ -38,6 +37,7 @@ fetch('http://localhost:3000/faculty/allfaculties')
   .catch(error => {
     console.error('Error fetching faculty data:', error);
   });
+
 // Event listener for the faculty select dropdown
 const facultySelect = document.getElementById("facultySelect");
 facultySelect.addEventListener('change', function() {
@@ -54,7 +54,7 @@ facultySelect.addEventListener('change', function() {
     .then(data => {
       // Process the data here
       console.log('Departments:', data);
-      departments = data.data
+      departments = data.data;
       // Assuming the response data is an array of department objects
       // You can populate the departments dropdown here
       const departmentSelect = document.getElementById("departmentSelect");
@@ -84,14 +84,39 @@ facultySelect.addEventListener('change', function() {
     });
 });
 
-
-// Function to populate rooms dropdown based on selected department
-function populateRooms() {
-  const selectedDepartmentId = document.getElementById("departmentSelect").value;
-  const roomSelect = document.getElementById("roomSelect");
+function populateRooms(rooms) {
+  const roomSection = document.getElementById("roomSection");
+  roomSection.innerHTML = ""; // Clear existing options
   
-  // Clear existing options
-  roomSelect.innerHTML = "";
+  // Add room elements for each room
+  rooms.forEach(room => {
+    const roomDiv = document.createElement("div");
+    roomDiv.classList.add("room");
+    
+    const roomNameDiv = document.createElement("div");
+    roomNameDiv.textContent = room.roomname; // Assuming room objects have roomName property
+    roomDiv.appendChild(roomNameDiv);
+    
+    const enrollBtn = document.createElement("div");
+    enrollBtn.classList.add("e-btn");
+    enrollBtn.textContent = "Enroll";
+    enrollBtn.onclick = function() {
+      enrollRoom(room._id); // Assuming room objects have _id property
+    };
+    roomDiv.appendChild(enrollBtn);
+    
+    roomSection.appendChild(roomDiv);
+  });
+  
+  // Show the room section after rooms are fetched
+  roomSection.style.display = "flex";
+  document.getElementById("registerBtn").style.display = "block";
+}
+
+// Event listener for the department select dropdown
+const departmentSelect = document.getElementById("departmentSelect");
+departmentSelect.addEventListener('change', function() {
+  const selectedDepartmentId = this.value; // Get the selected department ID
   
   // Fetch rooms based on the selected department ID
   fetch(`http://localhost:3000/rooms/getByDepartmentId/${selectedDepartmentId}`)
@@ -103,25 +128,20 @@ function populateRooms() {
     })
     .then(data => {
       // Process the data here
-      console.log('Rooms:', data);
-      const rooms = data.data
-      // Assuming the response data is an array of room objects
-      // You can populate the rooms dropdown here
-      rooms.forEach((room, index) => {
-        const option = document.createElement("option");
-        option.value = room._id; // Assuming room objects have _id property
-        option.textContent = room.roomName; // Assuming room objects have roomName property
-        roomSelect.appendChild(option);
-      });
-      
-      // Show the room section after rooms are fetched
-      document.getElementById("roomSection").style.display = "block";
-      document.getElementById("registerBtn").style.display = "block";
+      console.log('Rooms:', data.data);
+      const rooms = data.data;
+      populateRooms(rooms); // Populate rooms with enroll buttons
     })
     .catch(error => {
       console.error('Error fetching rooms:', error);
     });
-}
+});
+
+  // Function to handle room enrollment
+  function enrollRoom(roomId) {
+    // Implement your logic to enroll in the selected room using the roomId
+    console.log("Enrolling in room:", roomId);
+  }
 
 // Event listeners
 // You can add event listener for the register button to perform registration logic
@@ -136,25 +156,6 @@ function enrollRoom(btn) {
   const co = document.cookie;
   console.log(co);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function logout() {
   // Set the expiration date of the token cookie to the past
@@ -192,7 +193,6 @@ function getCookie(name) {
 // Example usage
 const userId = getUserIdFromCookie();
 console.log('User ID:', userId);
-
 
 //registration
 
