@@ -110,7 +110,7 @@ function populateRooms(rooms) {
   
   // Show the room section after rooms are fetched
   roomSection.style.display = "flex";
-  document.getElementById("registerBtn").style.display = "block";
+  // document.getElementById("registerBtn").style.display = "block";
 }
 
 // Event listener for the department select dropdown
@@ -139,23 +139,46 @@ departmentSelect.addEventListener('change', function() {
 
   // Function to handle room enrollment
   function enrollRoom(roomId) {
-    // Implement your logic to enroll in the selected room using the roomId
-    console.log("Enrolling in room:", roomId);
-  }
+    // Make a POST request to enroll in the selected room
+const userid = getUserIdFromCookie()
+fetch(`http://localhost:3000/rooms/enrollToRoom/${roomId}`, {
+  method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+students : userid
+
+    }),
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.message === "Student Enrolled Successfully") {
+     alert(data.message)
+     
+      } else {
+        console.error('Error adding department:', data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error adding department:', error);
+    });
+};
+
 
 // Event listeners
 // You can add event listener for the register button to perform registration logic
 
-function enrollRoom(btn) {
-  // Change background color to green
-  btn.style.backgroundColor = "green";
-  // Change button text to 'Enrolled'
-  btn.textContent = "Enrolled";
-  // Disable button after enrollment
-  btn.disabled = true;
-  const co = document.cookie;
-  console.log(co);
-}
+// function enrollRoom(btn) {
+//   // Change background color to green
+//   btn.style.backgroundColor = "green";
+//   // Change button text to 'Enrolled'
+//   btn.textContent = "Enrolled";
+//   // Disable button after enrollment
+//   btn.disabled = true;
+//   const co = document.cookie;
+//   console.log(co);
+// }
 
 function logout() {
   // Set the expiration date of the token cookie to the past
@@ -167,7 +190,7 @@ function logout() {
 function getUserIdFromCookie() {
   // Get the user_id from the cookie
   const cookie = getCookie('user_id');
-  
+
   if (!cookie) {
     // If cookie is not found, return null
     return null;
