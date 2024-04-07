@@ -25,7 +25,7 @@ exports.createroom = async (req, res) => {
 
 exports.getAllrooms = async (req, res) => {
   try {
-    const Rooms = await roommodel.find();
+    const Rooms = await roommodel.find().populate('department');
     res.status(200).json({
       data: Rooms,
     });
