@@ -174,6 +174,12 @@ message : err.message
         
         }
         
+// Check If User exist in another Room
+const otherRooms = await roommodel.find({ students: students, _id: { $ne: roomid } });
+        if (otherRooms.length > 0) {
+            return res.status(400).json({ message: "This Student is already enrolled in another room" });
+        }
+
         
         room.students.push(students);
         await room.save();
@@ -284,3 +290,31 @@ message : err.message
                 });
             }
         };
+
+
+        exports.leaveRoom = async (req, res) => {
+            try {
+                const rooms = req.params.id;
+                const students = req.body.students; // Assuming you only remove one student
+        
+                // Check if the room exists
+                const room = await roommodel.findById(rooms);
+                if (!room) {
+                    return res.status(404).json({ message: "The Room Doesn't Exist" });
+                }
+        
+                // Check if the student is enrolled in this room
+                if (!room.students.includes(students)) {
+                    return res.status(400).json({ message: "This Student is not enrolled in this room" });
+                }
+                const studentIndex = room.students.indexOf(students);
+                // Remove the student from the room's students array
+                room.students.splice(studentIndex, 1);
+                await room.save();
+        
+                return res.status(200).json({ message: "You left From Room Successfully" });
+            } catch (err) {
+                return res.status(500).json({ error: err.message });
+            }
+        }
+        
