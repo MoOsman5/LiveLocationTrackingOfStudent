@@ -60,10 +60,10 @@
         async function registerUser(event) {
         console.log("Hello From here")
             event.preventDefault()
-            const Username = document.getElementById('name').value
-            const email = document.getElementById('email').value
-            const password = document.getElementById('password').value
-        const roles =  document.getElementById('role').value
+          const Username = document.getElementById('name').value
+          const email = document.getElementById('email').value
+          const password = document.getElementById('password').value
+          const roles =  document.getElementById('role').value
 
             const result = await fetch('http://localhost:3000/auth/register', {
                 
@@ -72,10 +72,10 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    Username,
-                    email , 
-                    password ,
-                   roles   
+                Username,
+                email, 
+                password,
+                roles   
                 })
             }).then((res) => res.json())
 
@@ -89,7 +89,6 @@
         }
         const form = document.getElementById('signup-form')
         form.addEventListener('submit', registerUser)
-
     </script>
 
 

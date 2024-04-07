@@ -149,9 +149,9 @@ exports.enrollToRoom = async (req, res) => {
     const students = await req.body.students;
 
     //if The Room Doesnt Exist
-    console.log(roomid);
+  
     if (!roommodel.findById(roomid)) {
-      console.log("here");
+     
       return res.status(404).json({
         message: "The Room Doesn,t Exist",
       });
@@ -243,7 +243,7 @@ exports.findroomsbydepartmentid = async (req, res) => {
     const rooms = await roommodel
       .find({ department: req.params.DepartmentId })
       .select("roomname");
-    console.log(rooms);
+   
 
     res.status(200).json({
       data: rooms,
@@ -286,7 +286,7 @@ exports.leaveRoom = async (req, res) => {
 exports.findRoomsByUserId = async (req, res) => {
   try {
     const userid = await req.params.id;
-    console.log(userid);
+   
     // Find rooms where the user is enrolled
     const rooms = await roommodel.find({ students: userid });
 
