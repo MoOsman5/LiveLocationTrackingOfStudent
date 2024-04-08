@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Page</title>
+  <!-- Add your CSS stylesheets or styles here -->
+  <style>
+    /* CSS styles for body element (adds padding) */
+    body {
+      padding: 10px 30px; /* Adjust padding as needed */
+    }
+
+    /* CSS styles for student container */
+    #studentsContainer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    /* CSS styles for student div */
+    .student {
+      width: calc(25% - 60px); /* Adjust width to fit four students in a row */
+      margin-bottom: 20px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      cursor: pointer;
+
+    }
+
+    /* CSS styles for student image */
+    .student img {
+      width: 100px; /* Adjust image width as needed */
+      height: auto; /* Maintain aspect ratio */
+      border-radius: 50%; /* Make image circular */
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Students in Room</h1>
+  <div id="studentsContainer">
+    <!-- Student information will be displayed here dynamically -->
+  </div>
+
+  <!-- Add your JavaScript logic to fetch and display students -->
+  <script>
+    // Fetch students data based on the room ID from URL parameter
+    document.addEventListener('DOMContentLoaded', function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const roomId = urlParams.get('room');
+      fetchRoomData(roomId);
+    });
+
+    function fetchRoomData(roomId) {
+      fetch(`http://localhost:3000/rooms/detailedroom/${roomId}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Extract student IDs from the room data
+          const studentIds = data.data[0].students;
+          fetchStudentsData(studentIds);
+        })
+        .catch(error => {
+          console.error('Error fetching room data:', error);
+        });
+    }
+
+    function fetchStudentsData(studentIds) {
+      const studentsPromises = studentIds.map(studentId =>
+        fetch(`http://localhost:3000/users/finduser/${studentId}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+      );
+
+      Promise.all(studentsPromises)
+        .then(students => {
+          // Process the data here
+          displayStudents(students);
+        })
+        .catch(error => {
+          console.error('Error fetching students:', error);
+        });
+    }
+
+    function displayStudents(students) {
+      const studentsContainer = document.getElementById('studentsContainer');
+
+      students?.forEach(student => {
+        // Create student div
+        const studentDiv = document.createElement('div');
+        studentDiv.classList.add('student');
+
+        // Add student image
+        const studentImage = document.createElement('img');
+        studentImage.src = 'https://th.bing.com/th/id/OIP.audMX4ZGbvT2_GJTx2c4GgHaHw?rs=1&pid=ImgDetMain';
+        studentImage.alt = 'Student Image';
+        studentDiv.appendChild(studentImage);
+
+        // Add student name
+        const studentNameParagraph = document.createElement('p');
+        studentNameParagraph.textContent =student.data.Username;
+        studentDiv.appendChild(studentNameParagraph);
+
+        // Append student div to container
+        studentsContainer.appendChild(studentDiv);
+      });
+    }
+  </script>
+</body>
+
+</html>
