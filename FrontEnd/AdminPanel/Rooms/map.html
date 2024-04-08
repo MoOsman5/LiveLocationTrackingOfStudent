@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Map Marker Example</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map { height: 800px; }
+  </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script  src = "https://cdn.socket.io/4.5.4/socket.io.min.js">;
+</script>
+<script>
+  //Extracting User,s Data To Establish Socket io 
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const latitude = parseFloat(urlParams.get('latitude'));
+  const longitude = parseFloat(urlParams.get('longitude'));
+  const username = urlParams.get('username');
+ 
+  const socket = io('http://127.0.0.1:3000');
+socket.on("connect" ,()=>{
+console.log("connected")
+})
+socket.emit('location', { Username: username, latitude: latitude, longitude: longitude });
+
+
+socket.on('locationUpdate', (data) => {
+      console.log('Location updated:', data);
+      updateMarkerPosition(data);
+    });
+
+  var map = L.map('map').setView([0, 0], 50); 
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+  var marker = L.marker([0, 0]).addTo(map);
+ 
+ 
+ 
+ 
+ 
+ 
+  function updateMarkerPosition(data) {
+    var latitude = data.latitude;
+    var longitude = data.longitude;
+    var username = data.Username;
+
+    // Update marker position
+    marker.setLatLng([latitude, longitude]);
+
+    // Open popup with username
+    marker.bindPopup("<b>" + username + "</b>").openPopup();
+  }
+
+
+
+ 
+</script>
+
+</body>
+</html>

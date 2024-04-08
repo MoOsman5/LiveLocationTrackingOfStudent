@@ -101,7 +101,7 @@
         // Create student div
         const studentDiv = document.createElement('div');
         studentDiv.classList.add('student');
-
+console.log(student)
         // Add student image
         const studentImage = document.createElement('img');
         studentImage.src = 'https://th.bing.com/th/id/OIP.audMX4ZGbvT2_GJTx2c4GgHaHw?rs=1&pid=ImgDetMain';
@@ -112,7 +112,13 @@
         const studentNameParagraph = document.createElement('p');
         studentNameParagraph.textContent =student.data.Username;
         studentDiv.appendChild(studentNameParagraph);
-
+        
+        studentDiv.addEventListener('click', function () {
+          const latitude = student.data.latitude;
+          const longitude = student.data.longitude;
+          const username = student.data.Username;
+          window.location.href = `map.html?latitude=${latitude}&longitude=${longitude}&username=${username}`;
+        });
         // Append student div to container
         studentsContainer.appendChild(studentDiv);
       });
