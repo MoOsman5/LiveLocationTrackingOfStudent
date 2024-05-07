@@ -31,7 +31,7 @@ h1 {
   display: flex;
   justify-content:end;
   align-items: center;
-  background-color: #007bff;
+  background-color: #78091e;
   padding: 10px 20px;
 }
 
@@ -53,7 +53,7 @@ h1 {
 }
 
 #navbar ul li a:hover {
-  background-color: #0056b3;
+  background-color: #921129;
 }
 
 #auth-link {
@@ -68,12 +68,12 @@ h1 {
 }
 
 #auth-link a:hover {
-  background-color: #0056b3;
+  background-color: #921129;
 }
 
 
 #navbar .active a {
-  background-color: #0056b3; /* Darker blue for active link */
+  background-color: #921129; /* Darker blue for active link */
 }
 
 
@@ -286,7 +286,7 @@ form p a {
 
 /* Style the enroll button */
 .e-btn {
-  background-color: #007bff; /* Blue background color */
+  background-color: #78091e; /* Blue background color */
   color: #fff; /* White text color */
   padding: 10px 20px; /* Add padding to the button */
   border: none; /* Remove button border */
@@ -296,5 +296,15 @@ form p a {
 }
 
 .e-btn:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #921129; /* Darker blue on hover */
+}
+.img-container{
+  width: 10px;
+  height: 10px;
+}
+
+.logo{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
 }

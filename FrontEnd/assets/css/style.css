@@ -171,6 +171,22 @@ option {
 .login__register a:hover {
     text-decoration: underline;
 }
+.img-container{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  z-index:  999;
+  position: absolute;
+  right:  20px;
+  top:    20px;
+}
+
+.logo{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
 
 
 /*=============== BREAKPOINTS ===============*/

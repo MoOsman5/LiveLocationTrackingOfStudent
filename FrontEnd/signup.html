@@ -2,95 +2,98 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!--=============== REMIXICONS ===============-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css" crossorigin="">
+  <!--=============== REMIXICONS ===============-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css" crossorigin="">
 
-    <!--=============== CSS ===============-->
-    <link rel="stylesheet" href="assets/css/style.css">
+  <!--=============== CSS ===============-->
+  <link rel="stylesheet" href="assets/css/style.css">
 
-    <title>signup form - Bedimcode</title>
+  <title>signup form - Bedimcode</title>
 </head>
 
 <body>
-    <div class="login">
-        <img src="assets/img/login-bg.png" alt="image" class="login__bg">
+  <div class="img-container">
+    <img src="assets/img/logo.jpeg" alt="logo" class="logo">
+  </div>
+  <div class="login">
+    <img src="assets/img/login-bg.png" alt="image" class="login__bg">
 
-        <form action="POST" class="login__form"  id="signup-form">
-            <h1 class="login__title">Sign Up</h1>
+    <form action="POST" class="login__form" id="signup-form">
+      <h1 class="login__title">Sign Up</h1>
 
-            <div class="login__inputs">
-                <div class="login__box">
-                    <input type="text" placeholder="Your Name" id="name" required class="login__input">
-                    <i class="ri-mail-fill"></i>
-                </div>
-                <div class="login__box">
-                    <input type="email" placeholder="Email ID"  id="email" required class="login__input">
-                    <i class="ri-mail-fill"></i>
-                </div>
+      <div class="login__inputs">
+        <div class="login__box">
+          <input type="text" placeholder="Your Name" id="name" required class="login__input">
+          <i class="ri-mail-fill"></i>
+        </div>
+        <div class="login__box">
+          <input type="email" placeholder="Email ID" id="email" required class="login__input">
+          <i class="ri-mail-fill"></i>
+        </div>
 
-                <div class="login__box">
-                    <input type="password" placeholder="Password" id="password" required class="login__input">
-                    <i class="ri-lock-2-fill"></i>
-                </div>
+        <div class="login__box">
+          <input type="password" placeholder="Password" id="password" required class="login__input">
+          <i class="ri-lock-2-fill"></i>
+        </div>
 
-                <div class="login__box" id="role">
-                    <select name="Role" required class="login__input">
-                        <option disabled selected>Choice your role</option>
-                        <option value="1">teachers</option>
-                        <option value="2">students</option>
-                        <option value="3">admin</option>
-                        <option value="4">superadmin</option>
-                    </select>
-                </div>
-            </div>
-            <br>
-            <button type="submit"  id="signUp" class="login__button">Submit</button>
-
-
-        </form>
-    
-    </div>
+        <div class="login__box" id="role">
+          <select name="Role" required class="login__input">
+            <option disabled selected>Choice your role</option>
+            <option value="1">teachers</option>
+            <option value="2">students</option>
+            <option value="3">admin</option>
+            <option value="4">superadmin</option>
+          </select>
+        </div>
+      </div>
+      <br>
+      <button type="submit" id="signUp" class="login__button">Submit</button>
 
 
-    <script>
-			
-        async function registerUser(event) {
-        console.log("Hello From here")
-            event.preventDefault()
-            const Username = document.getElementById('name').value
-            const email = document.getElementById('email').value
-            const password = document.getElementById('password').value
-        const roles =  document.getElementById('role').value
+    </form>
 
-            const result = await fetch('http://localhost:3000/auth/register', {
-                
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    Username,
-                    email , 
-                    password ,
-                   roles   
-                })
-            }).then((res) => res.json())
+  </div>
 
-            if (result.message === 'You Successfully Make Account') {
-                // everythign went fine
-                alert('You Successfully Make Account')
-  
-            } else {
-                alert(result.error)
-            }
-        }
-        const form = document.getElementById('signup-form')
-        form.addEventListener('submit', registerUser)
 
-    </script>
+  <script>
+
+    async function registerUser(event) {
+      console.log("Hello From here")
+      event.preventDefault()
+      const Username = document.getElementById('name').value
+      const email = document.getElementById('email').value
+      const password = document.getElementById('password').value
+      const roles = document.getElementById('role').value
+
+      const result = await fetch('http://localhost:3000/auth/register', {
+
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          Username,
+          email,
+          password,
+          roles
+        })
+      }).then((res) => res.json())
+
+      if (result.message === 'You Successfully Make Account') {
+        // everythign went fine
+        alert('You Successfully Make Account')
+
+      } else {
+        alert(result.error)
+      }
+    }
+    const form = document.getElementById('signup-form')
+    form.addEventListener('submit', registerUser)
+
+  </script>
 
 
 
